@@ -1,4 +1,8 @@
 import React from 'react';
+const NextButton = require('./next_button');
+const SelectQuestion = require('./select_question');
+const TextQuestion = require('./text_question');
+const CalculatePremiumButton = require('./calculate_premium_button');
 
 class App extends React.Component {
   constructor() {
@@ -37,12 +41,9 @@ class App extends React.Component {
     }
   }
 
-  update(event) {
-    console.log(event.target.value);
-  }
-
   nextSection() {
-    this.setState({currentSection: this.state.currentSection + 1});
+    var currentSection = this.state.currentSection;
+    this.setState({currentSection: currentSection + 1});
   }
 
   calculatePremium() {
@@ -69,9 +70,9 @@ class App extends React.Component {
     const questions = this.state.sections[this.state.currentSection].questions.map(
       question => {
         if (question.type === 'text') {
-          return <TextQuestion name={question.name} update={this.update.bind(this)}/>
+          return <TextQuestion name={question.name} key={question.id}/>
         } else {
-          return <SelectQuestion name={question.name} options={question.options} update={this.update.bind(this)}/>
+          return <SelectQuestion name={question.name} key={question.id} options={question.options}/>
         }
       }
     );
@@ -95,27 +96,5 @@ App.defaultProps = {
   profile: "This is the default text"
 };
 
-const TextQuestion = (props) => <div><label>{props.name}</label><input type="text" onChange={props.update}/></div>;
-
-class SelectQuestion extends React.Component {
-  render() {
-    const options = this.props.options.map(option => <option>{option}</option>);
-    return (<div><label>{this.props.name}</label><select>
-      {options}
-    </select></div>);
-  }
-}
-
-class NextButton extends React.Component {
-  render() {
-    return <button className="nextButton" onClick={this.props.nextSection}>Next</button>;
-  }
-}
-
-class CalculatePremiumButton extends React.Component {
-  render() {
-    return <button className="calculateButton" onClick={this.props.calculatePremium}>Calculate</button>;
-  }
-}
 
 export default App
